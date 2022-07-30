@@ -1,5 +1,7 @@
-import 'package:fiestuki/adivina_influencer_tutorial.dart';
-import 'package:fiestuki/quien_mas_probable.dart';
+import 'package:fiestuki/adivina_influencer.dart';
+import 'package:fiestuki/mas_probable.dart';
+import 'package:fiestuki/tabu.dart';
+import 'package:fiestuki/tutorial.dart';
 import 'package:fiestuki/verdad_o_reto.dart';
 import 'package:fiestuki/yo_nunca.dart';
 import 'package:flutter/material.dart';
@@ -114,12 +116,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextButton.styleFrom(
                             minimumSize: const Size(1000, 1000)),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "Para meme el que no programó esto")));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Tutorial(
+                                      cuerpo:
+                                          "Te van a aparecer 5 palabras, la primera es lo que tienes que describir y las 4 siguientes son palabras que no puedes usar y el resto del grupo debe intentar adivinar qué estás describiendo",
+                                      nombre: "Tabú",
+                                      route: TabuRoute())));
                         },
-                        child: const Text('Quiz de memes')))),
+                        child: const Text('Tabú')))),
             SizedBox(
                 height: 50,
                 child: Center(
@@ -130,8 +136,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AdivinaInfluencerTutorial()));
+                                  builder: (context) => const Tutorial(
+                                      cuerpo:
+                                          "A continuación se mostrará un clip de un influencer y tienes que imitarlo, no tiene que ser necesariamente el clip proporcionado, pero debes hacerlo de forma que se reconozca",
+                                      nombre: "Adivina el influencer",
+                                      route: AdivinaInfluencerRoute())));
                         },
                         child: const Text('Adivina el influencer')))),
             SizedBox(

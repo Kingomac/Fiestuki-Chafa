@@ -51,45 +51,52 @@ class _AdivinaInfluencerRouteState extends State<AdivinaInfluencerRoute> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Adivina el influencer"),
-      ),
-      body: FutureBuilder(
-          future: _initialFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return ListView(
-              children: [
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: _controller != null
-                      ? YoutubePlayerIFrame(controller: _controller)
-                      : const Center(child: CircularProgressIndicator()),
-                ),
-                Text(
-                  _textos[index][0],
-                  style: const TextStyle(fontSize: 22, height: 5),
-                  textAlign: TextAlign.center,
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      index++;
-                      if (index == _textos.length) {
-                        _textos.shuffle();
-                        index = -1;
-                      }
-                      setState(() {
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        return Future(() => true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Adivina el influencer"),
+        ),
+        body: FutureBuilder(
+            future: _initialFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: _controller != null
+                        ? YoutubePlayerIFrame(controller: _controller)
+                        : const Center(child: CircularProgressIndicator()),
+                  ),
+                  Text(
+                    _textos[index][0],
+                    style: const TextStyle(fontSize: 22, height: 5),
+                    textAlign: TextAlign.center,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
                         index++;
-                        _controller?.load(_textos[index][1]);
-                      });
-                    },
-                    child: const Text("Siguiente"))
-              ],
-            );
-          }),
+                        if (index == _textos.length) {
+                          _textos.shuffle();
+                          index = -1;
+                        }
+                        setState(() {
+                          index++;
+                          _controller?.load(_textos[index][1]);
+                        });
+                      },
+                      child: const Text("Siguiente"))
+                ],
+              );
+            }),
+      ),
     );
   }
 
