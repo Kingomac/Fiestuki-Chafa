@@ -1,5 +1,6 @@
 import 'package:fiestuki/adivina_influencer.dart';
 import 'package:fiestuki/mas_probable.dart';
+import 'package:fiestuki/matame_camion.dart';
 import 'package:fiestuki/tabu.dart';
 import 'package:fiestuki/tutorial.dart';
 import 'package:fiestuki/verdad_o_reto.dart';
@@ -149,8 +150,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: TextButton(
                         style: TextButton.styleFrom(
                             minimumSize: const Size(1000, 1000)),
-                        onPressed: () {},
-                        child: const Text('Prueba')))),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Tutorial(
+                                      cuerpo:
+                                          "Tienes que decirle a la primera persona que pase la frase que te aparezca",
+                                      nombre: "Mátame camión",
+                                      route: MatameCamionRoute())));
+                        },
+                        child: const Text('Mátame camión')))),
             SizedBox(
                 height: 50,
                 child: Center(

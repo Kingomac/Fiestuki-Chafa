@@ -1,4 +1,5 @@
 import 'package:fiestuki/util/csv_parser.dart';
+import 'package:fiestuki/util/pop_two.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,11 +53,7 @@ class _AdivinaInfluencerRouteState extends State<AdivinaInfluencerRoute> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        return Future(() => true);
-      },
+      onWillPop: () => popTwo(context),
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Adivina el influencer"),
