@@ -1,6 +1,5 @@
 import 'package:fiestuki/util/csv_parser.dart';
 import 'package:fiestuki/util/pop_two.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -9,17 +8,18 @@ class AdivinaInfluencerRoute extends StatefulWidget {
   const AdivinaInfluencerRoute({Key? key}) : super(key: key);
 
   @override
-  _AdivinaInfluencerRouteState createState() => _AdivinaInfluencerRouteState();
+  AdivinaInfluencerRouteState createState() => AdivinaInfluencerRouteState();
 }
 
-class _AdivinaInfluencerRouteState extends State<AdivinaInfluencerRoute> {
+class AdivinaInfluencerRouteState extends State<AdivinaInfluencerRoute> {
   YoutubePlayerController? _controller;
   int index = 0;
   late List<List<String>> _textos;
   Future<void>? _initialFuture;
 
   Future<void> _loadTexts() async {
-    String a = await rootBundle.loadString("assets/adivina_influencer.csv");
+    String a =
+        await rootBundle.loadString("assets/texts/adivina_influencer.csv");
     _textos = await CsvParser.parse(a);
     _textos.shuffle();
     setState(() {

@@ -60,13 +60,22 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/yo_nunca.txt
-    - assets/reto.txt
-    - assets/verdad.txt
-    - assets/mas_probable.txt
-    - assets/adivina_influencer.csv
-    - assets/tabu.csv
-    - assets/matame_camion.txt
+    - assets/texts/menu.csv
+    - assets/texts/yo_nunca.txt
+    - assets/texts/reto.txt
+    - assets/texts/verdad.txt
+    - assets/texts/mas_probable.txt
+    - assets/texts/adivina_influencer.csv
+    - assets/texts/tabu.csv
+    - assets/texts/matame_camion.txt
+    - assets/texts/adivina_pelicula.csv
+    - assets/imgs/menu/verdadReto.webp
+    - assets/imgs/menu/yoNunca.webp
+    - assets/imgs/menu/matameCamion.webp
+    - assets/imgs/menu/tabu.webp
+    - assets/imgs/menu/masProbable.webp
+    - assets/imgs/menu/adivinaInfluencer.webp
+    - assets/imgs/menu/adivinaPelicula.webp
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,14 +1,38 @@
 import 'package:fiestuki/adivina_influencer.dart';
+import 'package:fiestuki/adivina_pelicula.dart';
 import 'package:fiestuki/mas_probable.dart';
 import 'package:fiestuki/matame_camion.dart';
 import 'package:fiestuki/tabu.dart';
 import 'package:fiestuki/tutorial.dart';
+import 'package:fiestuki/util/csv_parser.dart';
 import 'package:fiestuki/verdad_o_reto.dart';
 import 'package:fiestuki/yo_nunca.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+Widget getRoute(String juego) {
+  switch (juego) {
+    case "yoNunca":
+      return const YoNuncaRoute();
+    case "adivinaInfluencer":
+      return const AdivinaInfluencerRoute();
+    case "masProbable":
+      return const QuienMasProbableRoute();
+    case "matameCamion":
+      return const MatameCamionRoute();
+    case "tabu":
+      return const TabuRoute();
+    case "verdadReto":
+      return const VerdadRetoRoute();
+    case "adivinaPelicula":
+      return const AdivinaPeliculaRoute();
+    default:
+      return const MyApp();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -30,15 +54,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -46,16 +61,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  late List<List<String>> _texts;
+  Future<void>? _initialzeFuture;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  Future<void> _loadTexts() async {
+    String raw = await rootBundle.loadString("assets/texts/menu.csv");
+    _texts = await CsvParser.parse(raw);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        _initialzeFuture = _loadTexts();
+      });
     });
   }
 
@@ -65,185 +85,81 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: GridView.count(
-          crossAxisCount: 2,
-          children: <Widget>[
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const YoNuncaRoute()));
-                        },
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const VerdadRetoRoute()));
-                        },
-                        child: const Text('Verdad o reto')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const QuienMasProbableRoute()));
-                        },
-                        child: const Text('Quién es mas probable que')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Tutorial(
-                                      cuerpo:
-                                          "Te van a aparecer 5 palabras, la primera es lo que tienes que describir y las 4 siguientes son palabras que no puedes usar y el resto del grupo debe intentar adivinar qué estás describiendo",
-                                      nombre: "Tabú",
-                                      route: TabuRoute())));
-                        },
-                        child: const Text('Tabú')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Tutorial(
-                                      cuerpo:
-                                          "A continuación se mostrará un clip de un influencer y tienes que imitarlo, no tiene que ser necesariamente el clip proporcionado, pero debes hacerlo de forma que se reconozca",
-                                      nombre: "Adivina el influencer",
-                                      route: AdivinaInfluencerRoute())));
-                        },
-                        child: const Text('Adivina el influencer')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Tutorial(
-                                      cuerpo:
-                                          "Tienes que decirle a la primera persona que pase la frase que te aparezca",
-                                      nombre: "Mátame camión",
-                                      route: MatameCamionRoute())));
-                        },
-                        child: const Text('Mátame camión')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-            SizedBox(
-                height: 50,
-                child: Center(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            minimumSize: const Size(1000, 1000)),
-                        onPressed: _incrementCounter,
-                        child: const Text('Yo nunca')))),
-          ],
-        ),
-      ),
+      body: FutureBuilder(
+          future: _initialzeFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Center(
+              child: GridView.count(
+                crossAxisCount: 2,
+                children: <Widget>[
+                  for (List<String> btn in _texts)
+                    SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: TextButton(
+                          style: ButtonStyle(
+                              alignment: Alignment.center,
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.all(12.0))),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Tutorial(
+                                        cuerpo: btn[2],
+                                        nombre: btn[1],
+                                        route: getRoute(btn[0]))));
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/imgs/menu/${btn[0]}.webp",
+                                isAntiAlias: true,
+                                fit: BoxFit.fitHeight,
+                                width: 100,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                child: Text(
+                                  btn[1],
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                        /*TextButton.icon(
+                          style: TextButton.styleFrom(
+                              minimumSize: const Size(1000, 1000)),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Tutorial(
+                                        cuerpo: btn[2],
+                                        nombre: btn[1],
+                                        route: getRoute(btn[0]))));
+                          },
+                          label: Text(btn[1]),
+                          icon: Image.asset(
+                            "assets/imgs/menu/${btn[0]}.png",
+                            width: 20,
+                            height: 20,
+                            scale: 0.2,
+                          ),
+                        ),*/
+                        ),
+                ],
+              ),
+            );
+          }),
     );
   }
 }

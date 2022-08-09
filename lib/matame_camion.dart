@@ -17,9 +17,12 @@ class _MatameCamionRouteState extends State<MatameCamionRoute> {
   int _index = 0;
 
   Future<void> _loadTexts() async {
-    String raw = await rootBundle.loadString("assets/matame_camion.txt");
+    String raw = await rootBundle.loadString("assets/texts/matame_camion.txt");
     _texts = LineSplitter.split(raw).toList();
     _texts.shuffle();
+    for (int i = 0; i < _texts.length; i++) {
+      _texts[i] = _texts[i].replaceAll("\\n", "\n");
+    }
   }
 
   @override

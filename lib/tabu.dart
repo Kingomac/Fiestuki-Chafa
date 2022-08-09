@@ -20,7 +20,7 @@ class _TabuRouteState extends State<TabuRoute> {
   int _remainingTime = 45;
 
   Future<void> _loadTexts() async {
-    String raw = await rootBundle.loadString("assets/tabu.csv");
+    String raw = await rootBundle.loadString("assets/texts/tabu.csv");
     _texts = await CsvParser.parse(raw);
     _texts.shuffle();
   }
