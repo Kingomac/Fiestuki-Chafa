@@ -19,7 +19,7 @@ class AdivinaInfluencerRouteState extends State<AdivinaInfluencerRoute> {
 
   Future<void> _loadTexts() async {
     String a =
-        await rootBundle.loadString("assets/texts/adivina_influencer.csv");
+    await rootBundle.loadString("assets/texts/adivina_influencer.csv");
     _textos = await CsvParser.parse(a);
     _textos.shuffle();
     setState(() {
@@ -79,13 +79,13 @@ class AdivinaInfluencerRouteState extends State<AdivinaInfluencerRoute> {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        index++;
-                        if (index == _textos.length) {
+                        if (index >= _textos.length - 1) {
                           _textos.shuffle();
-                          index = -1;
+                          index = 0;
+                        } else {
+                          index++;
                         }
                         setState(() {
-                          index++;
                           _controller?.load(_textos[index][1]);
                         });
                       },
